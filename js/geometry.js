@@ -448,10 +448,35 @@ function pushDown( myCanvasIN, myCanvasOUT ){
     }
     myContextOUT.putImageData( myImageDataOUT, 0, 0 );
 }
+function halfCut( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    for ( let j = 0; j < myDataIN.length; j += 4 ) {
+        if(Math.floor(j / (myWidth*2)) % 2 == 0){
+            myDataOUT[j] = myDataIN[j]; //red
+            myDataOUT[j + 1] = myDataIN[j + 1]; //green
+            myDataOUT[j + 2] = myDataIN[j + 2]; //blue
+            myDataOUT[j + 3] = myDataIN[j + 3]; //alpha
+        }else{
+            myDataOUT[j] = 255; //red
+            myDataOUT[j + 1] = 255; //green
+            myDataOUT[j + 2] = 255; //blue
+            myDataOUT[j + 3] = 1; //alpha
+        }
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
 
 function wariacje(){
     pushDown(myCanvas1, myCanvas2);
-    powerRedProcess(myCanvas1, myCanvas3);
+    // powerRedProcess(myCanvas1, myCanvas3);
+    halfCut(myCanvas1, myCanvas3);
     powerGreenProcess(myCanvas1, myCanvas4);
     powerBlueProcess(myCanvas1, myCanvas5);
     sketch(myCanvas1, myCanvas6);
