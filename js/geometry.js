@@ -23,7 +23,7 @@ function doRotation90AImageData() {
     var myDataIN = myImageDataIN.data;
     var myDataOUT = myImageDataOUT.data;
 
-    for ( let i = 0; i < myDataIN.length; i += 4 ) { 
+    for ( let i = 0; i < myDataIN.length; i += 4 ) {
         var xe = Math.floor( i / 4 ) % myWidth;
         var ye = Math.floor( Math.floor( i / 4 ) / myWidth );
         var desc = myWidth * xe + 255 - ye; // ( xe, ye ) -> ( 255 - ye, xe )
@@ -72,7 +72,7 @@ function rotationsThetaVer1( myCanvasIN, myCanvasOUT, Theta, xs = myWidth / 2, y
     var x1, y1;
     var cost = Math.cos( Theta * Math.PI / 180.0 );
     var sint = Math.sin( Theta * Math.PI / 180.0 );
-    for ( let i = 0; i < myDataIN.length; i += 4 ) { 
+    for ( let i = 0; i < myDataIN.length; i += 4 ) {
         var xe = Math.floor( i / 4 ) % myWidth;
         var ye = Math.floor( Math.floor( i / 4 ) / myWidth );
         x1 = xs + Math.floor( ( xe - xs ) * cost + ( ye - ys ) * sint + 0.5 );
@@ -340,4 +340,119 @@ function doRandomDistribution( ) {
 
 function bitmapRandomDistribution( myCanvasIN, myCanvasOUT, parameter ) {
     //...
+}
+
+
+function powerRedProcess( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    for ( let j = 0; j < myDataIN.length; j += 4 ) {
+        myDataOUT[j] = 255; //red
+        myDataOUT[j + 1] = myDataIN[j + 1]; //green
+        myDataOUT[j + 2] = myDataIN[j + 2]; //blue
+        myDataOUT[j + 3] = myDataIN[j + 3]; //alpha
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
+
+function powerGreenProcess( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    for ( let j = 0; j < myDataIN.length; j += 4 ) {
+        myDataOUT[j] = myDataIN[j]; //red
+        myDataOUT[j + 1] = 255; //green
+        myDataOUT[j + 2] = myDataIN[j + 2]; //blue
+        myDataOUT[j + 3] = myDataIN[j + 3]; //alpha
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
+
+function powerBlueProcess( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    for ( let j = 0; j < myDataIN.length; j += 4 ) {
+        myDataOUT[j] = myDataIN[j]; //red
+        myDataOUT[j + 1] = myDataIN[j+1]; //green
+        myDataOUT[j + 2] = 255; //blue
+        myDataOUT[j + 3] = myDataIN[j + 3]; //alpha
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
+
+function sketch( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    for ( let j = 0; j < myDataIN.length; j += 4 ) {
+        if(myDataIN[j] < 200 && myDataIN[j+1] < 200 && myDataIN[j+2] < 200){
+            myDataOUT[j] = myDataIN[j]; //red
+            myDataOUT[j + 1] = myDataIN[j+1]; //green
+            myDataOUT[j + 2] = myDataIN[j+2]; //blue
+            myDataOUT[j + 3] = myDataIN[j + 3]; //alpha
+        }else{
+            myDataOUT[j] = 255; //red
+            myDataOUT[j + 1] = 255; //green
+            myDataOUT[j + 2] = 255; //blue
+            myDataOUT[j + 3] = 1; //alpha
+        }
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
+
+function pushDown( myCanvasIN, myCanvasOUT ){
+    var myContextIN = myCanvasIN.getContext( '2d' );
+    var myContextOUT = myCanvasOUT.getContext( '2d' );
+    var myImageDataIN = myContextIN.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+    var myImageDataOUT = myContextOUT.getImageData( 0, 0, myWidth, myCanvasOUT.height );
+
+    var myDataIN = myImageDataIN.data;
+    var myDataOUT = myImageDataOUT.data;
+
+    //pierwsza polowka
+    for ( let j = 0; j < myDataIN.length / 2; j += 4 ) {
+        myDataOUT[j] = myDataIN[j + myDataIN.length / 2]; //red
+        myDataOUT[j + 1] = myDataIN[j + myDataIN.length / 2 + 1]; //green
+        myDataOUT[j + 2] = myDataIN[j + myDataIN.length / 2 + 2]; //blue
+        myDataOUT[j + 3] = myDataIN[j + myDataIN.length / 2 + 3]; //alpha
+    }
+
+    //druga polowka
+    for ( let j = myDataIN.length / 2; j < myDataIN.length; j += 4 ) {
+        myDataOUT[j] = myDataIN[j - myDataIN.length / 2]; //red
+        myDataOUT[j + 1] = myDataIN[j - myDataIN.length / 2 + 1]; //green
+        myDataOUT[j + 2] = myDataIN[j - myDataIN.length / 2 + 2]; //blue
+        myDataOUT[j + 3] = myDataIN[j - myDataIN.length / 2 + 3]; //alpha
+    }
+    myContextOUT.putImageData( myImageDataOUT, 0, 0 );
+}
+
+function wariacje(){
+    pushDown(myCanvas1, myCanvas2);
+    powerRedProcess(myCanvas1, myCanvas3);
+    powerGreenProcess(myCanvas1, myCanvas4);
+    powerBlueProcess(myCanvas1, myCanvas5);
+    sketch(myCanvas1, myCanvas6);
 }
